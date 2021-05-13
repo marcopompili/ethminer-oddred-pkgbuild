@@ -3,37 +3,24 @@
 # Contributor: Andy Weidenbaum <archbaum@gmail.com>
 
 pkgname=ethminer-oddred
-pkgver=0.12.0
+pkgver=0.18.0
 pkgrel=1
 pkgdesc="Ethereum miner with OpenCL, CUDA and stratum support."
 arch=('x86_64')
-depends=(
-  'boost'
-  'boost-libs'
-  'jsoncpp'
-  'libjson-rpc-cpp-git'
-  'opencl-headers'
-  'python2'
-)
+depends=(boost boost-libs jsoncpp opencl-headers)
 optdeps=(
-  'cuda: NVIDEA GPU mining support.'
+  'cuda: NVidia GPU mining support.'
   'opencl-mesa: AMD/ATI GPU mining support.'
 )
 url="https://github.com/ethereum-mining/ethminer"
 license=('MIT')
-source=(
-  "https://github.com/ethereum-mining/ethminer/releases/download/v${pkgver}/ethminer-${pkgver}-Linux.tar.gz"
-)
-sha256sums=('be060bd78f9f0386b7a52f97d0c8b0bdc49941b2865e8ff77a0169bfd0b0b8af')
-provides=(
-  'ethminer'
-)
-conflicts=(
-  'ethereum'
-  'ethminer-git'
-  'ethereum-git'
-)
+source=("https://github.com/ethereum-mining/ethminer/releases/download/v${pkgver}/ethminer-${pkgver}-cuda-9-linux-x86_64.tar.gz")
+sha256sums=('98132b98c271ea1ad13796524996477f3a58c7c4a20182fe433f51e165a96642')
+provides=('ethminer')
+conflicts=('ethereum' 'ethminer-git' 'ethereum-git')
+options=(!strip)
 
 package() {
-  install -Dm755 -t "${pkgdir}"/usr/bin ${srcdir}/bin/ethminer
+  install -Dm755 -t "${pkgdir}"/usr/bin "${srcdir}"/bin/ethminer
+  cp -R "${srcdir}"/bin/kernels "${pkgdir}"/usr/bin
 }
